@@ -1,0 +1,24 @@
+pkgbase = asdo
+	pkgdesc = A portable version of OpenBSD's doas, with sudo-style insults and a customizable prompt/error message
+	pkgver = 0.r294.3e57786
+	pkgrel = 1
+	url = https://github.com/shrinehub-keeper/asdo
+	arch = x86_64
+	arch = i686
+	arch = aarch64
+	arch = armv7h
+	license = ISC
+	license = GPL2
+	makedepends = bison
+	makedepends = git
+	depends = pam
+	optdepends = doas-sudo-shim: (from AUR, only place where it is) for compatibility with sudo
+	provides = doas
+	conflicts = doas
+	conflicts = opendoas
+	conflicts = sudo
+	backup = etc/doas.conf
+	source = asdo::git+https://github.com/shrinehub-keeper/asdo.git
+	sha256sums = SKIP
+
+pkgname = asdo
