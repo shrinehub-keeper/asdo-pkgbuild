@@ -1,0 +1,39 @@
+name: Build asdo PKGBUILD
+
+on:
+  workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+    steps:
+      - name: Install dependencies
+        run: pacman -Sy --noconfirm base-devel bison git pam
+
+      - name: Create build user
+        run: useradd -m builder
+
+      - name: Build doas-sudo-shim
+        run: |
+          cd /tmp
+          git clone https://aur.archlinux.org/doas-sudo-shim.git
+          chown -R builder:builder doas-sudo-shim
+          cd doas-sudo-shim
+          su - builder -c 'makepkg -s --noconfirm'
+
+      - name: Build asdo
+        run: |
+          cd /tmp
+          git clone https://github.com/shrinehub-keeper/asdo.git
+          chown -R builder:builder asdo
+          cd asdo
+          su - builder -c 'makepkg -s --noconfirm'
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: pkgbuilds
+          path: |
+            /tmp/doas-sudo-shim/*.pkg.tar.zst
+            /tmp/asdo/*.pkg.tar.zst
